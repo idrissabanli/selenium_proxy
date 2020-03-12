@@ -36,23 +36,27 @@ class Bot():
 
     def __init__(self):
         self.worked_time = datetime.now()
-        with open(self.ip_file_name, 'r') as f:
-            proxies = f.readlines()
-            j= 0
-            while True:
-                threads = []
-                for proxy in proxies[j:j+self.worker_count]:
-                    j += 1
-                    print(f'loop count {j}')
-                    x = threading.Thread(target=self.click, args=(proxy,))
-                    x.start()
-                    threads.append(x)
-                
-                for thread in threads:
-                    thread.join()
-                
-                if j == len(proxies):
-                    break
+        j = 0
+        break_loop = False
+        while not break_loop:
+            threads = []
+            for i in range(j, j + self.worker_count):
+                with open(self.ip_file_name, 'r') as f:
+                    proxies = f.readlines()
+                    if j == len(proxies)-1:
+                        break_loop = True
+                        break
+                    proxy = proxies[j]
+                j += 1
+                print(f'loop count {j}')
+                x = threading.Thread(target=self.click, args=(proxy,))
+                x.start()
+                threads.append(x)
+            
+            for thread in threads:
+                thread.join()
+            
+            
                 
 
 if __name__ == '__main__':
