@@ -4,7 +4,7 @@ from selenium import webdriver
 
 class Bot():
     url = 'https://sfbay.craigslist.org/sfc/cto/d/concord-2005-vw-passat-motion-18t/7091270964.html' # target add url
-    ip_file_name = 'worked_ips_12_03_2020_11_44.txt' # IP file
+    ip_file_name = 'ips-test.txt' # IP file
     worker_count = 2 # selenium bot count
 
     def click(self, i):
@@ -23,7 +23,7 @@ class Bot():
             browser_driver = webdriver.Firefox(firefox_profile=firefox_profile)
             browser_driver.set_page_load_timeout(300)
             browser_driver.get(self.url)
-            with open(f'worked_ips_{datetime.now()}.txt', 'a') as g:
+            with open(f'worked_ips_{self.worked_time}.txt', 'a') as g:
                 g.write(i)
             element = browser_driver.find_element_by_class_name("flag")
             if element:
@@ -35,7 +35,7 @@ class Bot():
             print(f"Proxy ip ----- {PROXY} error", e)
 
     def __init__(self):
-
+        self.worked_time = datetime.now()
         with open(self.ip_file_name, 'r') as f:
             proxies = f.readlines()
             j= 0
