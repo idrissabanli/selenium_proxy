@@ -3,9 +3,9 @@ from datetime import datetime
 from selenium import webdriver
 
 class Bot():
-    url = 'https://sfbay.craigslist.org/sfc/cto/d/concord-2005-vw-passat-motion-18t/7091270964.html'
-    ip_file_name = 'worked_ips_12_03_2020_11_44.txt'
-    worker_count = 1
+    url = 'https://sfbay.craigslist.org/sfc/cto/d/concord-2005-vw-passat-motion-18t/7091270964.html' # target add url
+    ip_file_name = 'worked_ips_12_03_2020_11_44.txt' # IP file
+    worker_count = 2 # selenium bot count
 
     def click(self, i):
         try:      
@@ -38,17 +38,21 @@ class Bot():
 
         with open(self.ip_file_name, 'r') as f:
             proxies = f.readlines()
-            j= -1
+            j= 0
             while True:
-                j += 1
                 threads = []
                 for proxy in proxies[j:j+self.worker_count]:
+                    j += 1
+                    print(f'loop count {j}')
                     x = threading.Thread(target=self.click, args=(proxy,))
                     x.start()
                     threads.append(x)
                 
                 for thread in threads:
                     thread.join()
+                
+                if j == len(proxies):
+                    break
                 
 
 if __name__ == '__main__':
